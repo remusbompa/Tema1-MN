@@ -1,0 +1,125 @@
+1. function r=baza(sursa,b1,b2)
+ Functia converteste sursa, data sub forma de string, din baza b1 in baza 10 (se obtine b10) si 
+apoi din baza 10 in baza b2 si intoarce valoare in baza b2 sub forma unui string (r)
+- deoarece sirurile sursa date vor contine numere foarte mari, am creat functii pentru operatii
+cu numere mari (vectori cu elementele reprezentand cifrele sursei):
+*)function t=transformare(a)
+	-transforma un numar intreg(a) in numar mare(t)
+	-am folosit-o in algoritmul de convertire din baza b1 in baza 10 pentru a transforma
+fiecare element din sirul sursa
+*)function c=inmultire(d,inm)
+	-inmulteste doua numere mari (d si inm) si returneaza tot un numar mare (c)
+*)function c=adunare(nr,ad)
+	-aduna doua numere mari (nr si ad) si returneaza tot un numar mare (c)
+*)function [cat rest]=impartire(d,imp)
+	-imparte numarul mare (deimpartitul d) la numarul intreg (impartitorul imp) si returneaza
+un numar mare (catul cat) si un numar intreg (restul rest)
+	-cum in algoritm voi folosi drept impartitor baza b2, care este un numar mic (intre 2 si
+30), nu este nevoie ca impartitorul si restul sa fie numere mari
+- numarul b10 este un vector cu elementele reprezentand cifrele sursei convertite in baza 10
+(un numar mare)
+- dupa calcularea numarului sursa in baza 10, am aflat valoarea acestuia in baza b2 prin impartiri 
+succesive si salvarea restului sub forma de caracter (m) in stringul (r)
+- operatiile au fost executate pana cand numarul scris in baza 10 devine 0
+
+2. function Z=zigzag(n)
+ Functia intoarce matricea de zig-zag (Z) si primeste numarul de linii si de coloane a acesteia (n)
+- Z este initializat cu 0 pe toate cele n linii si n coloane
+- se parcurg toate cele 2*n-1 anti-diagonale (inclusiv cele 2 colturi: stanga sus si dreapta jos),
+alternand cele 2 conditii: 
+	*)mod(d,2)==0 (indicile diagonalei este par):
+	-numerotarea elementelor matricei (Z(i,j)) continua de unde a ramas (nr)
+	-anti-diagonala este parcursa de la dreapta sus la stanga jos (i++;j--)(linia creste, 
+										coloana scade)
+	-parcurgerea anti-diagonalei se termina atunci cand este depasita marginea din stanga a 
+	matricei (j<1 <=> j<=0) sau este depasita marginea de jos ( i>n ) 
+	-cum in acest moment, ma aflu cu perechea (i,j) pe anti-diagonala, imediat in afara
+	matricei, pentru a ajunge pe elementul urmator de pe margine este suficient sa inaintez cu
+	o coloana (j++) daca am trecut de prima coloana (j<=0) sau sa inaintez cu doua coloane si
+	sa ma intorc cu o linie daca am trecut de ultima linie (i>n) (j++;j++;i--)
+	*)mod(d,2)==1 (indicile diagonalei este impar):
+        -numerotarea elementelor matricei (Z(i,j)) continua de unde a ramas (nr)
+        -anti-diagonala este parcursa de la stanga jos la dreapta sus(i++;j--)(linia scade,
+                                                                                coloana creste)
+        -parcurgerea anti-diagonalei se termina atunci cand este depasita marginea din dreapta a
+        matricei (j>n) sau este depasita marginea de sus ( i<1 <=> i<=0 )
+        -cum in acest moment, ma aflu cu perechea (i,j) pe anti-diagonala, imediat in afara
+        matricei, pentru a ajunge pe elementul urmator de pe margine este suficient sa inaintez cu
+        o linie (i++) daca am trecut de prima linie (i<=0) sau sa inaintez cu doua linii si
+        sa ma intorc cu o coloana daca am trecut de ultima coloana (j>n) (i++;i++;j--)
+
+3. 1.)function m = morse()
+ Functia construieste arborele corespunzator codului Morse, de la nodurile de pe ultimul nivel la nodul radacina.
+   2.)function x = morse_decode(sir)
+-se parcurge sirul dat la intrare, pe toata lungimea sa (for i=1:length(sir))
+-exista trei cazuri iar caracterul de pe poz i poate fi:*)'.'
+							*)'-'
+							*)alt caracter
+-daca caracterul este '.',in cazul in care mai exista noduri la stanga (strcmp
+(M{2},"")!=1 ), M se muta pe acesta (M=M{2}).Analog se procedeaza in cazul '-'
+-la sfarsit, in cazul in care s-a parcurs toata lungimea sirului dat, functia
+va returna valoarea nodului in care s-a ajuns (x=M{1}) iar in caz contrar '*'
+   3.)function x = morse_encode(c)
+-se salveaza codul cautat in stringul x
+-pentru parcurgerea arborelui m-am folosit de doi vectori:
+	*)v-vector care retine nodurile in care nu s-a cautat si la dreapta (au fost parcurse doar pe partea din
+													stanga)
+	*)n-vectorul care retine calea (toate nodurile strabatute pana la pozitia curenta)
+-se incepe cu nodul radacina (v si n={M})
+-se parcurge algoritmul:
+*)se verifica daca valoarea nodului in care ma aflu este cea cautata (strcmp(M{1},c)==1||strcmp(char(M{1}+32)
+,c)==1) (nu conteaza daca este caracter de tipar sau nu)
+*)se parcurge latura cea mai din stanga a arborelui, pana cand nu mai exista element la stanga (length(M{2})==0)
+	-toate nodurile strabatute sunt incluse in v si n iar x primeste '.' la fiecare pas
+	-algoritmul se opreste daca a fost gasit c
+*)ma intrc pe calea v pana cand nodul in care ma aflu are ramura la dreapta (length(v{length(v)}{3})!=0)
+	-fiecare nod care nu are ramura la dreapta este exclus din n si v iar ultimul semn este scos din x
+	-ma opresc daca calea v ajunge vida
+	-pentru a elimina caracterele din x corespunzatoare nodurilor care au
+fost intre timp elinate din v (deoarece au fost strabatute pe ramura din 
+dreapta), voi scoate elementele din x si n pana cand n si v vor avea ultimul
+nod acelasi (strcmp(n{length(n)}{1},v{length(v)}{1})==1)
+*)se elimina din v elementul care are ramificatie la dreapta si se inlocuieste
+cu noul element aflat la dreapta acestuia(M=v{length(v)}{3}) 
+	-lui x i se adauga '-' iar lui n noul nod
+-algoritmul se parcurge pana cand nu mai raman elemente in v
+-daca pe parcursul algoritmului v devine vid, x valu valoarea '*'
+   4.)function x = multiple_decode(sir)
+ Ma folosesc de indicii inceput si sfarsit penru a delimita o litera in Morse
+      function x = multiple_encode(str)
+ Parcurg sirul str de la sfarsit la inceput,fiecare caracter convertit in cod Morse fiind adaugat la stanga
+lui x
+
+4.function[]=joc()
+-algoritmul va fi executat cat timp nu este apasata tasta 'q'
+-o este simbolul oponentului(omului) iar c al concurentului(calculatorului)
+-daca omul alege sa joace cu x (o='X'),acesta va incepe primul,si i se va cere sa marcheze un patratel gol
+	-in cazul primei mutari a calculatorului (cand omul incepe) acesta va muta in centru sau primul colt
+	-celelate mutari ale calculatorului vor fi stabilite prin algoritmul recursiv minimax, care foloseste 
+doua functii:
+	*)function [maxim Maxim]=maxi(M,depth,c,o)
+	-calculeaza si returneaza scorul maxim (maxim) al posibilelor mutari ale calculatorului, pentru o tabla
+											 M si adancimea depth
+	-returneaza configuratia Maxim a tablei de X si 0 penru care se obtine scorul maxim
+	-scorul fiecarei posibile mutari a calculatorului (A(:,:,i)) este calculat cu functia mini
+	*)function [minim Minim]=mini(M,depth,c,o)
+	--calculeaza si returneaza scorul minim (minim) (din perspectiva calculatorului)  al posibilelor mutari 
+								ale omului, pentru o tabla M si adancimea depth
+        -returneaza configuratia Minim a tablei de X si 0 penru care se obtine scorul minim
+        -scorul fiecarei posibile mutari a omului (A(:,:,i)) este calculat cu functia maxi
+	-inaintea operatiilor din cele doua functii, este verifiacat daca s-a castigat jocul cu ajutorul 
+functiei: function g=gameOver(M) (care verifica daca sunt aceleasi caractere pe o linie,coloana sau diagonala)
+sau daca s-a ocupat tabla (depth==0) si implicit jocul s-a terminat. In acest caz este apelata functia
+function e=evaluate(M,depth), care intoarce scorul 10+depth. In functie de functia in care se afla aceasta 
+verificare (mini sau maxi) functia evaluate va fi inoarsa cu semnul - (se afla in fct maxi => inainte sa mute
+calculatorul se consata ca jocul s-a incheiat => calculatorul a pierdut) sau cu semnul + (se afla in fct mini 
+=> omul a pierdut) sau va fi 0 (depth==0 dar !gameOver(M))
+	-scorul l-am ales ca 10+depth intrucat pentru calculator este mai avantajoasa o victorie la adancime
+mai mare (are numar mai mic de mutari) si este mai dezavantajoasa o pierdere la adancime mai mare 
+-dupa fiecare mutare este verificat daca a castigat cineva (gameOver(M)) sau daca s-a factur remiza (depth==0
+si !gameOver(M)), cazuri in care se incrementeaza variabilele contor a scorurilor celor 2 concurenti:scorO si
+scorC. La remiza nu se incrementeaza niciuna. De asemenea, dupa fiecare mutare, se deseneaza tabelul cu ajutorul
+functiei: function []=draw_tic_tac_toe(M)
+-se procedeaza analog daca omul alege sa joace cu 0 (o='0'), numai ca de data aceasta prima mutare a 
+calculatorului va fi in centru
+-mutarile omului se vor citi de la tastatura sub forma [linie coloana]
